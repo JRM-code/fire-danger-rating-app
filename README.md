@@ -1,2 +1,2 @@
 Calculates forest fire danger index and grass fire danger index using McArthur equations.
-This app can be reached here: 
+This app can be reached here: https://fdrcalc.streamlit.app/
