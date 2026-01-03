@@ -20,7 +20,7 @@ def main():
     fuel = st.sidebar.slider("Fuel Load (t/ha)", 0, 30, 10)
 
     # --- FFDI (McArthur) CALCULATOR --- #
-    st.subheader("FFDI Calculation")
+    st.subheader("Forest Fire Danger Index Calculator")
     st.write("The FFDI requires inputs of drought factor, temperature, relative humidity and wind speed. Add slope and fine fuel for spread rates.")
     ffdi = ffdi_calc(df, temp, rel_hum, wind_speed)
     fros = fros_calc(ffdi, fuel, slope)
@@ -29,16 +29,16 @@ def main():
     st.write("The forward rate of spread is: ", fros, "km/hr")
     st.write("The fire intensity is: ", fireint, "kW/m")
 
-    if ffdi <= 12:
+    if ffdi < 12:
         st.write("**:blue[No Rating]**")
         st.image("img/fdr-no-rating.svg")
-    elif ffdi >= 12 and ffdi <= 23:
+    elif ffdi >= 12 and ffdi < 24:
         st.write("**:green[Moderate]**")
         st.image("img/fdr-moderate.svg")
-    elif ffdi >= 24 and ffdi <= 49:
+    elif ffdi >= 24 and ffdi < 50:
         st.write("**:orange[High]**")
         st.image("img/fdr-high.svg")
-    elif ffdi >= 50 and ffdi <= 99:
+    elif ffdi >= 50 and ffdi < 100:
         st.write("**:orange[Extreme]**")
         st.image("img/fdr-extreme.svg")
     elif ffdi >= 100:
@@ -46,7 +46,7 @@ def main():
         st.image("img/fdr-catastrophic.svg")
 
     # --- GFDI (McArthur) CALCULATOR --- #
-    st.subheader("GFDI Calculation")
+    st.subheader("Grass Fire Danger Index Calculator")
     st.write("The GFDI requires inputs of drought factor, temperature, relative humidity, wind speed and curing.")
     gfdi = gfdi_calc(df, temp, rel_hum, wind_speed, curing)
     st.write("The GFDI is: ", gfdi)
@@ -55,7 +55,8 @@ def main():
     st.image("img/afdrs.png")
 
 def ffdi_calc(df, temp, rel_hum, wind_speed):
-    ffdi = round(2 * math.exp(-0.45 + 0.987 * math.log(df + 0.001) - 0.03458 * rel_hum + 0.0338 * temp + 0.0234 * wind_speed), 2) # https://dayboro.au/fire-danger-index/
+    # https://dayboro.au/fire-danger-index/
+    ffdi = round(2 * math.exp(-0.45 + 0.987 * math.log(df + 0.001) - 0.03458 * rel_hum + 0.0338 * temp + 0.0234 * wind_speed), 2) 
     return ffdi
 
 def gfdi_calc(df, temp, rel_hum, wind_speed, curing):
